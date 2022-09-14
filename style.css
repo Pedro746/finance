@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;600;800&display=swap');
+
+* {
+    font-family: 'Nunito', sans-serif !important;
+}
+
+.alert{
+    border-left-color: red 18px !important;
+
+    
+}
+
+.content{
+    display: flex !important;
+    flex-direction: row !important;
+    
+
+    
+}
+.card{
+    background-color: #34495e !important;
+    margin: 10px !important;
+    /* max-width: 18rem !important; */
+    /* color: #0E1117; */
+}
+
+.stApp {
+    background-color: #0E1117;
+    
+
+}
+
+#MainMenu {
+    visibility: hidden;
+}
+
+
+
+
+footer {
+    visibility: hidden;
+}
+
+
+
+
