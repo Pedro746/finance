@@ -19,3 +19,11 @@ def showAll():
 def Deletar(id):
         db.cursor.execute(f"DELETE FROM despesa WHERE id_despesa = {id}")
         db.db.commit()
+
+def showTotal():
+        db.cursor.execute("SELECT COUNT(id_despesa) from despesa")
+        conta = []
+
+        for row in db.cursor.fetchall():
+            conta.append(conta)
+        return conta
