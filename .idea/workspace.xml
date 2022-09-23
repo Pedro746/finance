@@ -2,7 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="46731544-4b83-4e0e-a51e-f58033b2d984" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Controllers/DespesaController.py" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/DespesaController.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pages/Banco/banco.py" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/Banco/banco.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pages/Dashboard/dashboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/Dashboard/dashboard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pages/Depesas/cadastroDespesa.py" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/Depesas/cadastroDespesa.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pages/Finalidade/finalidade.py" beforeDir="false" afterPath="$PROJECT_DIR$/Pages/Finalidade/finalidade.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

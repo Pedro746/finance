@@ -1,12 +1,14 @@
+from time import time
 import streamlit as st
 import Controllers.DespesaController as DespesaController
 import Controllers.FinalidadeController as FinalidadeController
 import Controllers.BancoController as BancoController
 import models.Despesa as despesa
+import time
+
 
 
 def CadastroDespesa():
-    st.title('Cadastro de despesa')
 
     fin = []
     for item in FinalidadeController.showAll():
@@ -17,16 +19,44 @@ def CadastroDespesa():
     for item in BancoController.showAll():
         bco.append(item.banco)
 
+    idAlteracao = st.experimental_get_query_params()
+    st.experimental_set_query_params()
+    despesaRecuperada = None
+    if idAlteracao.get("id") != None:
+        idAlteracao = idAlteracao.get("id")[0]
+        despesaRecuperada = DespesaController.showById(idAlteracao)
+        st.experimental_set_query_params(
+            id=[despesaRecuperada.id]
+        )
+        st.title('Alteração de despesa')
+        if st.button("Voltar", key=2):
+            st.experimental_set_query_params()
+            st.experimental_rerun()
 
-    
+    else:
+        st.title('Cadastro de despesa')
+
+
     with st.form(key="inclucde_despesa", clear_on_submit=True):
-        input_banco = st.selectbox(label="Selecione o Banco", options=(bco))
-        input_valor = st.number_input(label="Valor R$",format="%.2f")
-        input_finalidade = st.selectbox(label="Selecione a finalidade", options=(fin))
-        input_data = st.date_input(label="Data")
-        input_descricao = st.text_area(label="Descrição da despesa")
+        if despesaRecuperada == None:
+            input_banco = st.selectbox(label="Selecione o Banco", options=(bco))
+            input_valor = st.number_input(label="Valor R$",format="%.2f")
+            input_finalidade = st.selectbox(label="Selecione a finalidade", options=(fin))
+            input_data = st.date_input(label="Data")
+            input_descricao = st.text_area(label="Descrição da despesa")
 
-        input_submit = st.form_submit_button("Cadastrar despesa")
+
+        else:
+            input_banco = st.selectbox(label="Selecione o Banco", options=(bco), index=bco.index(despesaRecuperada.banco))
+            input_valor = st.number_input(label="Valor R$", value=despesaRecuperada.valor)
+            input_finalidade = st.selectbox(label="Selecione a finalidade", options=(fin), index=fin.index(despesaRecuperada.finalidade))
+            input_data = st.date_input(label="Data", value=despesaRecuperada.data)
+            input_descricao = st.text_area(label="Descrição da despesa", value=despesaRecuperada.descricao)
+
+        if despesaRecuperada == None:
+            input_submit = st.form_submit_button("Cadastrar despesa")
+        else:
+            input_submit = st.form_submit_button("Atualizar despesa")
 
     if input_submit:
         if input_descricao == "" or input_descricao == " ":
@@ -39,58 +69,43 @@ def CadastroDespesa():
                 </svg>
                 <div>
                  &nbsp Preencha todos os campos!
+                 <span class="progress"></span>
                 </div>
                 </div>
             """, unsafe_allow_html=True)
+            # time.sleep(2)
+            # st.experimental_rerun()
         else:
-            DespesaController.Incluir(despesa.despesa(0, input_banco, input_valor, input_finalidade, input_data, input_descricao))
-            # st.success(f'Despesa {input_descricao} foi cadastrada com sucesso!', icon="✅")
-            st.markdown(f"""
-            <div class="alerta-success alert d-flex align-items-center" role="alert">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
-            <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
-            </svg>
-            <div>
-            &nbsp Despesa {input_descricao} foi cadastrada com sucesso!
-            </div>
-            </div>
-            """, unsafe_allow_html=True)
-    
-    with st.container():
-        st.write('***')
-        st.subheader('Listagem de todas as despesas cadastradas')
-
-        colms = st.columns((1, 3, 2, 2, 2, 2, 2, 2))
-        campos = ['N°', 'Banco', 'Valor', 'Finalidade', 'Data', 'Descrição', 'Editar', 'Excluir']
-
-        for col, campo_nome in zip(colms, campos):
-                col.write(campo_nome)
-        
-        for item in DespesaController.showAll():
-                col1, col2, col3, col4, col5, col6, col7, col8 = st.columns((1, 3, 2, 2, 2, 2, 2, 2))
-                col1.write(item.id)
-                col2.write(item.banco)
-                col3.write(f'R$ {item.valor}')
-                col4.write(item.finalidade)
-                col5.write(item.data)
-                col6.write(item.descricao)
-                delete = col7.empty()
-                on_click_deletar = delete.button('Deletar', 'btnDeletar' + str(item.id))
-                alterar = col8.empty()
-                on_click_alterar = alterar.button('Alterar', 'btnAlterar'  + str(item.id))
-
-
-                if on_click_deletar:
-                        DespesaController.Deletar(item.id)
-                        delete.button('Deletado', 'btnDeletado' + str(item.id))
-                        # st.success(f'Despesa deletada com sucesso', icon="✅")
-                        st.markdown(f"""
+            if despesaRecuperada == None:
+                DespesaController.Incluir(despesa.despesa(0, input_banco, input_valor, input_finalidade, input_data, input_descricao))
+                # st.success(f'Despesa {input_descricao} foi cadastrada com sucesso!', icon="✅")
+                st.markdown(f"""
+                <div class="alerta-success alert d-flex align-items-center" role="alert">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+                </svg>
+                <div>
+                &nbsp Despesa {input_descricao} foi cadastrada com sucesso!
+                </div>
+                </div>
+                """, unsafe_allow_html=True)
+                time.sleep(2)
+                st.experimental_rerun()
+            else:
+                # st.experimental_set_query_params()
+                DespesaController.Alterar(despesa.despesa(despesaRecuperada.id, input_banco, input_valor, input_finalidade, input_data, input_descricao))
+                # st.success(f'Despesa {input_descricao} foi cadastrada com sucesso!', icon="✅")
+                st.markdown(f"""
                         <div class="alerta-success alert d-flex align-items-center" role="alert">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
                         <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
                         </svg>
                         <div>
-                        &nbsp Despesa <strong><u>{item.descricao}</u></strong> deletada com sucesso!
+                        &nbsp Despesa N° #{despesaRecuperada.id} foi alterada com sucesso!
                         </div>
                         </div>
                         """, unsafe_allow_html=True)
+                time.sleep(2)
+                st.experimental_rerun()
+                         
+            

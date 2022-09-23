@@ -2,6 +2,7 @@ import streamlit as st
 import datetime as dt
 import Controllers.FinalidadeController as FinalidadeController
 import Controllers.BancoController as BancoController
+import plotly.express as px
 
 bco = []
 for item in BancoController.showAll():
@@ -26,6 +27,9 @@ def Dashboard():
 
                 with col3:
                         st.selectbox('Selecione a Finalidade', options=(fin))
+        
+        with st.container():
+                pass
 
     
         

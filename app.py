@@ -1,10 +1,12 @@
-from msilib.schema import Icon
 import streamlit as st
 from streamlit_option_menu import option_menu
 import Pages.Depesas.cadastroDespesa as cadastroDespesa
 import Pages.Dashboard.dashboard as dashboard
 import Pages.Banco.banco as banco
 import Pages.Finalidade.finalidade as finalidade
+import Pages.Depesas.listagemDespesas as listagemDespesas
+import Pages.Banco.listagemBanco as listaBanco
+import Pages.Finalidade.listagemFinalidade as listagemFinalidade
 
 
 
@@ -23,8 +25,8 @@ st.markdown("""
 with st.sidebar:
     selected = option_menu(
         menu_title="Menu",
-        options=["Dashboard", "Cadastrar Despesa", "Cadastrar Banco", "Cadastrar Finalidade"],
-        icons=["bar-chart", "plus", "bank", "pencil"],
+        options=["Dashboard", "Cadastrar Despesa", "Lista Despesas", "Cadastrar Banco", "Lista Bancos", "Cadastrar Finalidade", "Lista Finalidades"],
+        icons=["bar-chart", "plus", "eye", "bank", "eye", "pencil", "eye"],
         menu_icon="grid",
         default_index=0,
         # orientation="horizontal",       
@@ -33,22 +35,42 @@ with st.sidebar:
 
 # TELA DASHBOARD
 if selected == "Dashboard":
+    st.experimental_set_query_params()
     dashboard.Dashboard()
 
 
 # TELA CADASTRO DE DESPESA
 if selected == "Cadastrar Despesa":
+    st.experimental_set_query_params()
     cadastroDespesa.CadastroDespesa()
+
+# TELA LISTAGEM DE DESPESA
+if selected == "Lista Despesas":
+    # st.experimental_set_query_params()
+    listagemDespesas.Lista()
+    
    
 
 # TELA DE CADASTRO DE BANCO
 if selected == "Cadastrar Banco":
+    st.experimental_set_query_params()
     banco.Banco()
+
+# TELA DE LISTAGEM DE BANCO
+if selected == "Lista Bancos":
+    st.experimental_set_query_params()
+    listaBanco.listagemBanco()
 
 
 # TELA DE CADASTRO DE FINALIDADE
 if selected == "Cadastrar Finalidade":
+    st.experimental_set_query_params()
     finalidade.Finalidade()
+
+# TELA DE CADASTRO DE FINALIDADE
+if selected == "Lista Finalidades":
+    st.experimental_set_query_params()
+    listagemFinalidade.ListaFinalidade()
 
 
 
